@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "267132613837",
+    "firebase_url": "https://laboratorio9-84f7e.firebaseio.com",
+    "project_id": "laboratorio9-84f7e",
+    "storage_bucket": "laboratorio9-84f7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267132613837:android:b98b824c3b213392",
+        "android_client_info": {
+          "package_name": "com.example.agustin.laboratorio09"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267132613837-thad0gmhkuj9vit3oarv2hud5ee4v9ud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7OnjKU7M1QlJ_na2WnhWqaOi2pATosFU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
