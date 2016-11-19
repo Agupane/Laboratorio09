@@ -1,9 +1,11 @@
 package com.example.agustin.laboratorio09;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -13,9 +15,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
-
+    private SensorManager mSensorManager;
+    private Sensor mAceleration;
+    private float aceleracion_maxima[];
+    private float aceleracion_nueva[];
+    private String fechaMaximaAceleracion;
+    private Boolean actualizarX,actualizarY,actualizarZ;
+    private long fecha;
+    private TextView tvHoraMaxX,tvHoraMaxY,tvHoraMaxZ;
+    private TextView tvMagnitudMaxX,tvMagnitudMaxY,tvMagnitudMaxZ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,18 +37,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        cargarVariables();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String token = preferences.getString("registration_id", null);
         System.out.println("token: "+token);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+    }
+
+    private void cargarVariables(){
+        tvHoraMaxX = (TextView) findViewById(R.id.tvHoraMaxX);
+        tvHoraMaxY = (TextView) findViewById(R.id.tvHoraMaxY);
+        tvHoraMaxZ = (TextView) findViewById(R.id.tvHoraMaxZ);
+        tvMagnitudMaxX = (TextView) findViewById(R.id.tvMagnitudMaxX);
+        tvMagnitudMaxY = (TextView) findViewById(R.id.tvMagnitudMaxY);
+        tvMagnitudMaxZ = (TextView) findViewById(R.id.tvMagnitudMaxZ);
+        aceleracion_maxima = new float[3];
+        aceleracion_nueva = new float[3];
+        aceleracion_maxima[0] = 0;
+        aceleracion_maxima[1] = 0;
+        aceleracion_maxima[2] = 0;
+        actualizarZ=false;
+        actualizarY=false;
+        actualizarX=false;
     }
 
     @Override
@@ -61,11 +89,60 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        aceleracion_nueva[0] = event.values[0];
+        aceleracion_nueva[1] = event.values[1];
+        aceleracion_nueva[2] = event.values[2];
+        if(aceleracion_nueva[0] > aceleracion_maxima[0]){
+            aceleracion_maxima[0] = aceleracion_nueva[0];
+            fecha = System.currentTimeMillis();
+            actualizarX=true;
+        }
+        if(aceleracion_nueva[1] > aceleracion_maxima[1]){
+            aceleracion_maxima[1] = aceleracion_nueva[1];
+            fecha = System.currentTimeMillis();
+            actualizarY=true;
+        }
+        if(aceleracion_nueva[2] > aceleracion_maxima[2]){
+            aceleracion_maxima[2] = aceleracion_nueva[2];
+            fecha = System.currentTimeMillis();
+            actualizarZ=true;
+        }
+        actualizarInterfaz();
+    }
+
+    private void actualizarInterfaz(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        fechaMaximaAceleracion = sdf.format(fecha);
+        if(actualizarX){
+            tvHoraMaxX.setText(fechaMaximaAceleracion);
+            tvMagnitudMaxX.setText(Float.toString(aceleracion_maxima[0]));
+            actualizarX=false;
+        }
+        if(actualizarY){
+            tvHoraMaxY.setText(fechaMaximaAceleracion);
+            tvMagnitudMaxY.setText(Float.toString(aceleracion_maxima[1]));
+            actualizarY=false;
+        }
+        if(actualizarZ){
+            tvHoraMaxZ.setText(fechaMaximaAceleracion);
+            tvMagnitudMaxZ.setText(Float.toString(aceleracion_maxima[2]));
+            actualizarZ=false;
+        }
 
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mSensorManager.registerListener(this,mAceleration,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        mSensorManager.unregisterListener(this);
     }
 }

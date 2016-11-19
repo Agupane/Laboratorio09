@@ -33,7 +33,7 @@
         android:text="@string/magnitud_maximo_x"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvMagnitudMaximoX" />
+        android:id="@+id/tvMagnitudMaxX" />
 
     <TextView
         android:text="@string/hora_maximo_y"
@@ -51,7 +51,7 @@
         android:text="@string/hora_max_z"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvHoraMaxZ:" />
+        android:id="@+id/tvHoraMaxZ" />
 
     <TextView
         android:text="@string/magnitud_maximo_z"
