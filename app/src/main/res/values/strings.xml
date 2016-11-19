@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Laboratorio09</string>
     <string name="action_settings">Settings</string>
+    <string name="hora_max_z">Hora Max Z:</string>
+    <string name="hora_maximo_y">Hora Maximo Y:</string>
+    <string name="magnitud_maximo_y">Magnitud Maximo Y:</string>
+    <string name="magnitud_maximo_x">Magnitud Maximo X:</string>
+    <string name="magnitud_maximo_z">Magnitud Maximo Z:</string>
 </resources>
